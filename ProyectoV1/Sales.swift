@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct Sales: View {
     @State private var idproduct = ""
@@ -23,13 +24,69 @@ struct Sales: View {
                 Text("Sales").font(.largeTitle).padding()
                 
                     Component_TextField(textFieldTitle: "IdProduct", textFieldText: $idproduct)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(idproduct)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.idproduct = "\(filtered)"
+                        }
+                        };
                     Component_TextField(textFieldTitle: "Name", textFieldText: $name)
                     Component_TextField(textFieldTitle: "Quantity", textFieldText: $quantity)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(quantity)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.quantity = "\(filtered)"
+                        }
+                        };
                     Component_TextField(textFieldTitle: "IdV", textFieldText: $idv)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(idv)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.idv = "\(filtered)"
+                        }
+                        };
                     Component_TextField(textFieldTitle: "IdC", textFieldText: $idc)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(idc)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.idc = "\(filtered)"
+                        }
+                        };
                     Component_TextField(textFieldTitle: "Pieces", textFieldText: $pieces)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(pieces)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.pieces = "\(filtered)"
+                        }
+                        };
                     Component_TextField(textFieldTitle: "Subtotal", textFieldText: $subtotal)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(subtotal)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.subtotal = "\(filtered)"
+                        }
+                        };
                     Component_TextField(textFieldTitle: "Total", textFieldText: $total)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(total)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.total = "\(filtered)"
+                        }
+                        };
                 
                 Button("Generate Sale"){
                     mostrarAlerta = false

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct User: View {
     @State private var id = ""
@@ -24,13 +25,20 @@ struct User: View {
             HStack{
                 VStack{
                     Component_TextField(textFieldTitle: "Id", textFieldText: $id)
+                        .keyboardType(.numberPad)
+                        .onReceive(Just(id)){
+                        value in
+                        let filtered = "\(value)".filter { "0123456789".contains($0) }
+                        if filtered != value {
+                            self.id = "\(filtered)"
+                        }
+                        };
                     Component_TextField(textFieldTitle: "LastName", textFieldText: $lastname)
                     Component_TextField(textFieldTitle: "Age", textFieldText: $age)
                     Component_TextField(textFieldTitle: "Gender", textFieldText: $gender)
                     Component_TextField(textFieldTitle: "Email or User", textFieldText: $emailUser)
                     Component_SecureField(secureFieldTitle: "Password", secureFieldText: $password)
                 }.padding(.horizontal, 100)
-                
             }
             
 
