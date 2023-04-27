@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct Products: View {
     @State private var id = ""
@@ -16,36 +17,103 @@ struct Products: View {
     @State private var price = ""
     @State private var utility = ""
     @State private var showAlert = false;
+    
+    @State private var title = "";
     @State private var message = "";
+    
     var body: some View {
-        VStack{
-            Text("Products").font(.largeTitle).padding()
-
-                TextField("IdProduct",text: $id);
-            
-                TextField("Name",text: $name);
-                TextField("Pieces",text: $description);
-                TextField("IDA",text: $units);
-                TextField("Cost",text: $cost);
-                TextField("Price",text: $price);
-                TextField("Utility",text: $utility);
-            
-            Button("Alta") {
+        NavigationView{
+            VStack{
+                Text("Products").font(.largeTitle).padding()
                 
-                if (name != "") {
-                    message = "Creando Cuenta"
-                    //NavigationLink(destination: PerfilView(), label: {Text("ir a la ventana del perfil")}).padding()
-                } else {
-                    message = "Uno o mas campos vacios o contraseña erronea"
+                Form{
+                    TextField("IdProduct",text: $id)
+                    .keyboardType(.numberPad)
+                    .onReceive(Just(id)){
+                    value in
+                    let filtered = "\(value)".filter { "0123456789".contains($0) }
+                    if filtered != value {
+                        self.id = "\(filtered)"
+                    }
+                    };
+                    TextField("Name",text: $name);
+                    TextField("Descripcion",text: $description);
+                    //Unidades
+                    TextField("Unidades",text: $units)
+                    .keyboardType(.numberPad)
+                    .onReceive(Just(units)){
+                    value in
+                    let filtered = "\(value)".filter { "0123456789".contains($0) }
+                    if filtered != value {
+                        self.units = "\(filtered)"
+                    }
+                    };
+                    //Costo
+                    TextField("Cost",text: $cost)
+                    .keyboardType(.numberPad)
+                    .onReceive(Just(cost)){
+                    value in
+                    let filtered = "\(value)".filter { "0123456789".contains($0) }
+                    if filtered != value {
+                        self.cost = "\(filtered)"
+                    }
+                    };
+                    //Precio
+                    TextField("Price",text: $price)
+                    .keyboardType(.numberPad)
+                    .onReceive(Just(price)){
+                    value in
+                    let filtered = "\(value)".filter { "0123456789".contains($0) }
+                    if filtered != value {
+                        self.price = "\(filtered)"
+                    }
+                    };
+                    //Utilidad
+                    TextField("Utility",text: $utility)
+                    .keyboardType(.numberPad)
+                    .onReceive(Just(utility)){
+                    value in
+                    let filtered = "\(value)".filter { "0123456789".contains($0) }
+                    if filtered != value {
+                        self.utility = "\(filtered)"
+                    }
+                    };
+                
                 }
-                showAlert = true
-                
-            }.padding()
+                Button("Register product") {
+                    verificarCampos()
+                    showAlert = true
+                    limpiar()
+                    
+                }.padding()
                 .alert(isPresented: $showAlert){
-                    Alert(title: Text("Hola"),
-                          message: Text(message))
+                Alert(title: Text(title), message: Text(message))
                 }
+                NavigationLink(destination: Menu(), label: {
+                    Text("Regresar al menu")
+                })
+            }
         }
+    }
+    
+    func verificarCampos(){
+        if([id, name, units, cost, price, utility].contains("")){
+            title = "Error"
+            message = "One or more fields are empty"
+        }else{
+            title="Exito"
+            message="The fields were saved succesfully"
+        }
+    }
+    
+    func limpiar(){
+        id=""
+        name=""
+        description=""
+        units=""
+        cost=""
+        price=""
+        utility=""
     }
 }
 
