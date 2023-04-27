@@ -23,13 +23,12 @@ struct User: View {
             
             HStack{
                 VStack{
-                    TextField("Id", text: $id)
-                    TextField("Name", text: $name)
-                    TextField("LastName", text: $lastname)
-                    TextField("Age", text: $age)
-                    TextField("Gender", text: $gender)
-                    TextField("Email or User", text: $emailUser)
-                    SecureField("Password", text: $password)
+                    Component_TextField(textFieldTitle: "Id", textFieldText: $id)
+                    Component_TextField(textFieldTitle: "LastName", textFieldText: $lastname)
+                    Component_TextField(textFieldTitle: "Age", textFieldText: $age)
+                    Component_TextField(textFieldTitle: "Gender", textFieldText: $gender)
+                    Component_TextField(textFieldTitle: "Email or User", textFieldText: $emailUser)
+                    Component_SecureField(secureFieldTitle: "Password", secureFieldText: $password)
                 }.padding(.horizontal, 100)
                 
             }

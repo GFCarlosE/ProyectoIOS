@@ -54,7 +54,6 @@ struct Sales: View {
                     .alert(isPresented: $mostrarAlerta){
                         Alert(title: Text("Validation Failed"),message: Text(mess))
                     }
-                
             }
         }
     }
