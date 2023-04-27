@@ -22,17 +22,14 @@ struct Sales: View {
             VStack{
                 Text("Sales").font(.largeTitle).padding()
                 
-                Form{
-                    TextField("IdProduct", text: $idproduct)
-                    TextField("Name", text: $name)
-                    TextField("Quantity", text: $quantity)
-                    TextField("IdV", text: $idv)
-                    TextField("IdC", text: $idc)
-                    TextField("Pieces", text: $pieces)
-                    TextField("Subtotal", text: $subtotal)
-                    TextField("Total", text: $total)
-                }.padding().scrollContentBackground(.hidden)
-                    
+                    Component_TextField(textFieldTitle: "IdProduct", textFieldText: $idproduct)
+                    Component_TextField(textFieldTitle: "Name", textFieldText: $name)
+                    Component_TextField(textFieldTitle: "Quantity", textFieldText: $quantity)
+                    Component_TextField(textFieldTitle: "IdV", textFieldText: $idv)
+                    Component_TextField(textFieldTitle: "IdC", textFieldText: $idc)
+                    Component_TextField(textFieldTitle: "Pieces", textFieldText: $pieces)
+                    Component_TextField(textFieldTitle: "Subtotal", textFieldText: $subtotal)
+                    Component_TextField(textFieldTitle: "Total", textFieldText: $total)
                 
                 Button("Generate Sale"){
                     mostrarAlerta = false
@@ -57,7 +54,6 @@ struct Sales: View {
                     .alert(isPresented: $mostrarAlerta){
                         Alert(title: Text("Validation Failed"),message: Text(mess))
                     }
-                
             }
         }
     }
