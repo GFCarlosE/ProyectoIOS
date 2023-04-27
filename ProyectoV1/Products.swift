@@ -26,8 +26,7 @@ struct Products: View {
             VStack{
                 Text("Products").font(.largeTitle).padding()
                 
-                Form{
-                    TextField("IdProduct",text: $id)
+                    Component_TextField(textFieldTitle: "IdProduct", textFieldText: $id)
                     .keyboardType(.numberPad)
                     .onReceive(Just(id)){
                     value in
@@ -36,10 +35,10 @@ struct Products: View {
                         self.id = "\(filtered)"
                     }
                     };
-                    TextField("Name",text: $name);
-                    TextField("Descripcion",text: $description);
+                    Component_TextField(textFieldTitle: "Name", textFieldText: $name)
+                Component_TextField(textFieldTitle: "Description", textFieldText: $description)
                     //Unidades
-                    TextField("Unidades",text: $units)
+                Component_TextField(textFieldTitle: "Units", textFieldText: $units)
                     .keyboardType(.numberPad)
                     .onReceive(Just(units)){
                     value in
@@ -49,7 +48,7 @@ struct Products: View {
                     }
                     };
                     //Costo
-                    TextField("Cost",text: $cost)
+                Component_TextField(textFieldTitle: "Cost", textFieldText: $cost)
                     .keyboardType(.numberPad)
                     .onReceive(Just(cost)){
                     value in
@@ -59,7 +58,7 @@ struct Products: View {
                     }
                     };
                     //Precio
-                    TextField("Price",text: $price)
+                Component_TextField(textFieldTitle: "Price", textFieldText: $price)
                     .keyboardType(.numberPad)
                     .onReceive(Just(price)){
                     value in
@@ -69,7 +68,7 @@ struct Products: View {
                     }
                     };
                     //Utilidad
-                    TextField("Utility",text: $utility)
+                Component_TextField(textFieldTitle: "Utility", textFieldText: $utility)
                     .keyboardType(.numberPad)
                     .onReceive(Just(utility)){
                     value in
@@ -79,34 +78,35 @@ struct Products: View {
                     }
                     };
                 
-                }
+                
                 Button("Register product") {
-                    verificarCampos()
+                    validateFields()
                     showAlert = true
-                    limpiar()
+                    
                     
                 }.padding()
                 .alert(isPresented: $showAlert){
                 Alert(title: Text(title), message: Text(message))
                 }
                 NavigationLink(destination: Menu(), label: {
-                    Text("Regresar al menu")
+                    Text("Return to Menu")
                 })
             }
         }
     }
     
-    func verificarCampos(){
+    func validateFields(){
         if([id, name, units, cost, price, utility].contains("")){
             title = "Error"
             message = "One or more fields are empty"
         }else{
-            title="Exito"
+            clean()
+            title="Success"
             message="The fields were saved succesfully"
         }
     }
     
-    func limpiar(){
+    func clean(){
         id=""
         name=""
         description=""
