@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct Purchase: View {
     @State private var idProduct = ""
@@ -13,39 +14,86 @@ struct Purchase: View {
     @State private var pieces = ""
     @State private var ida = ""
     @State private var showAlert = false;
+    
+    @State private var title = "";
     @State private var message = "";
+    
+    
+    
     var body: some View {
         
         //Color.blue.edgesIgnoringSafeArea(.all)
         VStack{
             Text("Purchase").font(.largeTitle).padding()
-            Form{
-                
-                TextField("IdProduct",text: $idProduct);
-                TextField("Name",text: $name);
-                TextField("Pieces",text: $pieces);
-                TextField("IDA",text: $ida);
-                
-            }.padding().scrollContentBackground(.hidden)
+
+                //id
+                Component_TextField(textFieldTitle: "IdProduct", textFieldText: $idProduct)
+                .keyboardType(.numberPad)
+                .onReceive(Just(idProduct)){
+                value in
+                let filtered = "\(value)".filter { "0123456789".contains($0) }
+                if filtered != value {
+                    self.idProduct = "\(filtered)"
+                }
+                };
+                //name
+                Component_TextField(textFieldTitle: "Name", textFieldText: $name)
+                //pieces
+                Component_TextField(textFieldTitle: "Pieces", textFieldText: $pieces)
+                .keyboardType(.numberPad)
+                .onReceive(Just(pieces)){
+                value in
+                let filtered = "\(value)".filter { "0123456789".contains($0) }
+                if filtered != value {
+                    self.pieces = "\(filtered)"
+                }
+                };
+                //ida
+                Component_TextField(textFieldTitle: "IDA", textFieldText: $ida)
+                .keyboardType(.numberPad)
+                .onReceive(Just(ida)){
+                value in
+                let filtered = "\(value)".filter { "0123456789".contains($0) }
+                if filtered != value {
+                    self.ida = "\(filtered)"
+                }
+                };
+
             
             Button("Buy") {
-                
-                if (name != "") {
-                    message = "Creando Cuenta"
-                    //NavigationLink(destination: PerfilView(), label: {Text("ir a la ventana del perfil")}).padding()
-                } else {
-                    message = "Uno o mas campos vacios o contraseña erronea"
-                }
+                validateFields()
                 showAlert = true
+
                 
             }.padding()
                 .alert(isPresented: $showAlert){
-                    Alert(title: Text("Hola"),
+                    Alert(title: Text(title),
                           message: Text(message))
                 }
         }
     }
+    
+    func validateFields(){
+        if([idProduct, name, pieces, ida].contains("")){
+            title = "Error"
+            message = "One or more fields are empty"
+        }else{
+            clean()
+            title="Success"
+            message="The fields were saved succesfully"
+        }
+    }
+
+    func clean(){
+        idProduct=""
+        name=""
+        pieces=""
+        ida=""
+    }
+    
 }
+
+
 
 struct Purchase_Previews: PreviewProvider {
     static var previews: some View {
