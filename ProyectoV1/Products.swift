@@ -88,8 +88,9 @@ struct Products: View {
                 .alert(isPresented: $showAlert){
                 Alert(title: Text(title), message: Text(message))
                 }
+                
                 NavigationLink(destination: Menu(), label: {
-                    Text("Return to Menu")
+                    Text("Back to Menu")
                 })
             }
         }

@@ -13,64 +13,108 @@ struct User: View {
     @State private var name = ""
     @State private var lastname = ""
     @State private var age = ""
-    @State private var gender = ""
+    @State private var genre = ""
     @State private var emailUser = ""
     @State private var password = ""
-    @State private var mess = ""
-    @State private var mostrarAlerta = false
+    @State private var title = ""
+    @State private var message = ""
+    @State private var showAlert = false
+    @State private var options = ["Man", "Woman"]
+    @State private var selectedItem = ["Man", "Woman"]
+    
     var body: some View {
-        VStack{
-            Text("User").font(.largeTitle).padding()
-            
-            HStack{
-                VStack{
-                    Component_TextField(textFieldTitle: "Id", textFieldText: $id)
-                        .keyboardType(.numberPad)
-                        .onReceive(Just(id)){
-                        value in
-                        let filtered = "\(value)".filter { "0123456789".contains($0) }
-                        if filtered != value {
-                            self.id = "\(filtered)"
-                        }
-                        };
-                    Component_TextField(textFieldTitle: "LastName", textFieldText: $lastname)
-                    Component_TextField(textFieldTitle: "Age", textFieldText: $age)
-                    Component_TextField(textFieldTitle: "Gender", textFieldText: $gender)
-                    Component_TextField(textFieldTitle: "Email or User", textFieldText: $emailUser)
-                    Component_SecureField(secureFieldTitle: "Password", secureFieldText: $password)
-                }.padding(.horizontal, 100)
-            }
-            
+        NavigationView{
+            VStack{
+                Text("User").font(.largeTitle).padding()
+                
+                HStack{
+                    VStack{
+                        Component_TextField(textFieldTitle: "Id", textFieldText: $id)
+                            .keyboardType(.numberPad)
+                            .onReceive(Just(id)){
+                            value in
+                            let filtered = "\(value)".filter { "0123456789".contains($0) }
+                            if filtered != value {
+                                self.id = "\(filtered)"
+                            }
+                            };
+                        Component_TextField(textFieldTitle: "Name", textFieldText: $name)
+                        Component_TextField(textFieldTitle: "LastName", textFieldText: $lastname)
+                        Component_TextField(textFieldTitle: "Age", textFieldText: $age)
+                            .keyboardType(.numberPad)
+                            .onReceive(Just(age)){
+                            value in
+                            let filtered = "\(value)".filter { "0123456789".contains($0) }
+                            if filtered != value {
+                                self.age = "\(filtered)"
+                            }
+                            };
+                        //Component_TextField(textFieldTitle: "Gender", textFieldText: $genre)
+                        
+                        Component_TextField(textFieldTitle: "Email or User", textFieldText: $emailUser)
+                        Component_SecureField(secureFieldTitle: "Password", secureFieldText: $password)
+                        Picker("Genre", selection: $genre){
+                            ForEach(options, id: \.self){ item in
+                                Text(item)
+                            }
+                        }.buttonBorderShape(.roundedRectangle)
+                         .buttonStyle(.bordered)
+                         .frame(maxWidth: .infinity)
+                    }.padding(.horizontal, 20)
+                }
+                
 
-                
-            
-            Button("Generate Sale"){
-                mostrarAlerta = false
-                
-                if (id == "" || name == "" || lastname == "" || age == "" || gender == "" || emailUser == "" || password == ""){
-                    id = ""
-                    name = ""
-                    lastname = ""
-                    age = ""
-                    gender = ""
-                    emailUser = ""
-                    password = ""
                     
-                    mess = "At least one field is empty"
-                    mostrarAlerta = true
-                }else if(password == "111"){
-                    
-                }else{
-                    mess = "All data accepted"
-                    mostrarAlerta = true
-                }
-            }.padding()
-                .alert(isPresented: $mostrarAlerta){
-                    Alert(title: Text("Validation Failed"),message: Text(mess))
-                }
-            
+                
+                Button("Generate Sale"){
+                    validateFields()
+                    showAlert = true
+                }.padding()
+                    .alert(isPresented: $showAlert){
+                        Alert(title: Text(title),message: Text(message))
+                    }
+                NavigationLink(destination: Menu(),
+                label: {
+                    Text("Back to Menu")
+                })
+                
+            }
         }
     }
+
+    func isValidEmail(email: String) -> Bool {
+        if(email.contains("@")){
+            return true
+        }
+        return false
+    }
+    
+    func validateFields(){
+        let validEmail = isValidEmail(email: emailUser)
+        print(validEmail)
+        if([id, name, lastname, age, genre, emailUser, password].contains("")){
+            title = "Error"
+            message = "One or more fields are empty"
+        }else if(!validEmail){
+            title = "Error"
+            message = "Write a correct email"
+        } else{
+            clean()
+            title="Success"
+            message="The fields were saved succesfully"
+        }
+    }
+    
+    func clean(){
+        id=""
+        name=""
+        lastname=""
+        age=""
+        genre=""
+        emailUser=""
+        password=""
+    }
+    
 }
 
 struct User_Previews: PreviewProvider {
